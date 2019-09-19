@@ -143,7 +143,7 @@ class FranceTVIE(InfoExtractor):
             ext = determine_ext(video_url)
             if ext == 'f4m':
                 if georestricted:
-                    # See https://github.com/rg3/youtube-dl/issues/3963
+                    # See https://github.com/ytdl-org/youtube-dl/issues/3963
                     # m3u8 urls work fine
                     continue
                 formats.extend(self._extract_f4m_formats(
@@ -371,12 +371,13 @@ class FranceTVInfoIE(FranceTVBaseInfoExtractor):
                 self.url_result(dailymotion_url, DailymotionIE.ie_key())
                 for dailymotion_url in dailymotion_urls])
 
-        video_id, catalogue = self._search_regex(
-            (r'id-video=([^@]+@[^"]+)',
+        video_id = self._search_regex(
+            (r'player\.load[^;]+src:\s*["\']([^"\']+)',
+             r'id-video=([^@]+@[^"]+)',
              r'<a[^>]+href="(?:https?:)?//videos\.francetv\.fr/video/([^@]+@[^"]+)"'),
-            webpage, 'video id').split('@')
+            webpage, 'video id')
 
-        return self._make_url_result(video_id, catalogue)
+        return self._make_url_result(video_id)
 
 
 class FranceTVInfoSportIE(FranceTVBaseInfoExtractor):
